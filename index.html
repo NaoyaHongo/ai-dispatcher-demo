@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI配車マンとの会話デモ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 初期画面 -->
+    <section id="initial-screen" class="screen active">
+        <div class="container">
+            <h1>AI配車マンとの会話デモ</h1>
+            <div class="demo-description">
+                <p><strong>運送会社の配車担当者</strong>と<strong>AI配車マン</strong>の<br><span class="highlight">電話会話シミュレーション</span></p>
+                
+                <!-- 状況設定の図を追加 -->
+                <div class="situation-image">
+                    <div class="situation-diagram">
+                        <div class="left-side">
+                            <h3>あなた = 配車マン</h3>
+                            <div class="person-icon person-you"></div>
+                        </div>
+                        <div class="center">
+                            <div class="phone-line">
+                                <div class="arrow-left"></div>
+                                <div class="phone-icon-simple"></div>
+                                <div class="arrow-right"></div>
+                            </div>
+                        </div>
+                        <div class="right-side">
+                            <h3>AI配車マン</h3>
+                            <div class="person-icon person-ai"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="phone-animation">
+                    <div class="phone-icon">
+                        <div class="phone-ring"></div>
+                    </div>
+                    <p>電話がかかってきています</p>
+                </div>
+            </div>
+            <button id="start-conversation" class="cta-button">電話に出る</button>
+        </div>
+    </section>
+
+    <!-- 会話画面 -->
+    <section id="conversation-screen" class="screen">
+        <div class="container">
+            <h2>AI配車マンとの電話会話</h2>
+            
+            <div class="phone-interface">
+                <div class="phone-header">
+                    <div class="caller-info">
+                        <div class="caller-avatar">🤖</div>
+                        <div class="caller-details">
+                            <h3>AI配車マン</h3>
+                            <p class="call-status">通話中...</p>
+                        </div>
+                    </div>
+                    <div class="call-duration" id="call-duration">00:00</div>
+                </div>
+
+                <div class="conversation-container">
+                    <div class="conversation-examples">
+                        <h3>会話例：</h3>
+                        
+                        <div class="example-scenario">
+                            <h4>配車スケジュール確認</h4>
+                            <div class="example-conversation">
+                                <p class="you">「今日の配車スケジュールを確認したい」</p>
+                                <p class="ai">「本日の配車スケジュールは以下の通りです。<br>8:00 田中：東京-大阪<br>9:30 佐藤：横浜-名古屋」</p>
+                            </div>
+                        </div>
+                        
+                        <div class="example-scenario">
+                            <h4>突発的な注文対応</h4>
+                            <div class="example-conversation">
+                                <p class="you">「急な注文が入ったけど、対応できる？」</p>
+                                <p class="ai">「山本ドライバーが待機中で対応可能です」</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phone-actions">
+                    <button class="phone-button mute">🔇</button>
+                    <button class="phone-button keypad">🔢</button>
+                    <button id="end-conversation" class="phone-button end-call">📞</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 結果画面 -->
+    <section id="result-screen" class="screen">
+        <div class="container">
+            <h2>会話結果</h2>
+            <div class="result-container">
+                <h3>電話でAIと会話できます</h3>
+                <div class="result-analysis">
+                    <h3>AI配車マンによる効果</h3>
+                    <ul>
+                        <li>配車業務の効率化：電話一本で最新情報を確認</li>
+                        <li>人的ミスの削減：AIによる最適な提案</li>
+                        <li>コスト削減：24時間365日対応可能</li>
+                        <li>ドライバーの負担軽減：最適ルート提案</li>
+                        <li>顧客満足度向上：迅速・正確な情報提供</li>
+                    </ul>
+                </div>
+            </div>
+            <button id="restart-demo" class="cta-button">デモをやり直す</button>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html> 

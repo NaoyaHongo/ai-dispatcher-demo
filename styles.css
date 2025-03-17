@@ -1,0 +1,562 @@
+/* リセットとベーススタイル */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.4;
+    color: #333;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    overflow-x: hidden;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 追加スタイル - ハイライト */
+.highlight {
+    background-color: #ffeb3b;
+    color: #333;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1.8rem;
+    white-space: nowrap;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 画面の共通スタイル */
+.screen {
+    display: none;
+    height: 100vh;
+    width: 100%;
+    padding: 20px 0;
+    overflow: hidden;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.screen h1, .screen h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.screen h1 {
+    font-size: 3.2rem;
+    color: #ff6b00;
+    margin-top: 0;
+}
+
+.screen h2 {
+    font-size: 2.8rem;
+}
+
+.cta-button {
+    background-color: #ff6b00;
+    color: white;
+    border: none;
+    padding: 15px 35px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: block;
+    margin: 25px auto;
+    min-width: 250px;
+}
+
+.cta-button:hover {
+    background-color: #e65c00;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 初期画面 - フルスクリーン最適化 */
+#initial-screen {
+    text-align: center;
+    background: linear-gradient(135deg, #fff8f0, #fff);
+}
+
+.demo-description {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto 20px;
+    background-color: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.demo-description p {
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    line-height: 1.4;
+}
+
+/* 状況設定図のスタイル - 拡大 */
+.situation-image {
+    margin: 25px 0;
+    max-height: 35vh;
+}
+
+.situation-diagram {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 20px;
+    max-height: 100%;
+}
+
+.left-side, .right-side {
+    width: 40%;
+    text-align: center;
+}
+
+.left-side h3, .right-side h3 {
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.center {
+    width: 20%;
+}
+
+.phone-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.phone-icon-simple {
+    width: 50px;
+    height: 50px;
+    background-color: #333;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.phone-icon-simple:before {
+    content: '📞';
+    font-size: 24px;
+    color: white;
+}
+
+.arrow-left, .arrow-right {
+    width: 35px;
+    height: 3px;
+    background-color: #333;
+    position: relative;
+}
+
+.arrow-left:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -3px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 8px solid #333;
+}
+
+.arrow-right:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -3px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid #333;
+}
+
+.person-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.person-you {
+    background-color: #b19cd9;
+    position: relative;
+}
+
+.person-you:before {
+    content: '👤';
+    font-size: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.person-ai {
+    background-color: #b0b0b0;
+    position: relative;
+}
+
+.person-ai:before {
+    content: '🤖';
+    font-size: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 電話アニメーション */
+.phone-animation {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.phone-icon {
+    width: 70px;
+    height: 70px;
+    background-color: #ff6b00;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    position: relative;
+}
+
+.phone-icon:before {
+    content: '📞';
+    font-size: 35px;
+    color: white;
+}
+
+.phone-ring {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 2px solid #ff6b00;
+    border-radius: 50%;
+    animation: ring 1.5s infinite;
+}
+
+.phone-animation p {
+    font-size: 1.5rem;
+}
+
+@keyframes ring {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.3;
+    }
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
+
+/* 会話画面 - フルスクリーン最適化 */
+#conversation-screen {
+    background-color: #f5f5f5;
+}
+
+.phone-interface {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.phone-header {
+    background-color: #ff6b00;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.caller-info {
+    display: flex;
+    align-items: center;
+}
+
+.caller-avatar {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 28px;
+}
+
+.caller-details h3 {
+    font-size: 1.6rem;
+    margin: 0;
+}
+
+.call-status {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.call-duration {
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+.conversation-container {
+    padding: 20px;
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 会話例のスタイル */
+.conversation-examples {
+    margin-bottom: 20px;
+}
+
+.conversation-examples h3 {
+    color: #ff6b00;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.example-scenario {
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.example-scenario h4 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 1.6rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    font-weight: bold;
+}
+
+.example-conversation p {
+    margin-bottom: 12px;
+    padding: 12px 15px;
+    border-radius: 12px;
+    position: relative;
+    max-width: 85%;
+    font-size: 1.4rem;
+    line-height: 1.4;
+}
+
+.example-conversation p.you {
+    background-color: #ffebda;
+    align-self: flex-end;
+    margin-left: auto;
+    text-align: right;
+    margin-left: 15%;
+    border-bottom-right-radius: 0;
+}
+
+.example-conversation p.ai {
+    background-color: #e6f2ff;
+    align-self: flex-start;
+    margin-right: auto;
+    border-bottom-left-radius: 0;
+}
+
+/* 電話アクションボタン */
+.phone-actions {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+}
+
+.phone-button {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.phone-button.mute {
+    background-color: #eee;
+}
+
+.phone-button.keypad {
+    background-color: #eee;
+}
+
+.phone-button.end-call {
+    background-color: #ff3b30;
+    color: white;
+    transform: rotate(135deg);
+}
+
+.phone-button:hover {
+    transform: scale(1.1);
+}
+
+.phone-button.end-call:hover {
+    background-color: #d63026;
+    transform: rotate(135deg) scale(1.1);
+}
+
+/* 結果画面 - フルスクリーン最適化 */
+#result-screen {
+    background: linear-gradient(135deg, #fff8f0, #fff);
+}
+
+.result-container {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    height: 70vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.result-container h3 {
+    color: #ff6b00;
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+    text-align: center;
+}
+
+.result-analysis {
+    background-color: #f9f9f9;
+    padding: 25px;
+    border-radius: 15px;
+    flex: 1;
+    overflow: auto;
+}
+
+.result-analysis h3 {
+    margin-bottom: 25px;
+}
+
+.result-analysis ul {
+    list-style-type: disc;
+    margin-left: 25px;
+}
+
+.result-analysis li {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    padding-left: 10px;
+    line-height: 1.4;
+}
+
+/* MacBook Pro 14インチに最適化 */
+@media (min-width: 1400px) and (max-width: 1600px) {
+    .container {
+        max-width: 100%;
+    }
+    
+    .demo-description, 
+    .phone-interface, 
+    .result-container {
+        max-width: 1500px;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1400px) {
+    .container {
+        max-width: 100%;
+    }
+    
+    .screen h1 {
+        font-size: 3rem;
+    }
+    
+    .screen h2 {
+        font-size: 2.6rem;
+    }
+}
+
+/* タブレットとスマホの画面サイズ対応 - オプション */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .screen h1 {
+        font-size: 2.5rem;
+    }
+    
+    .screen h2 {
+        font-size: 2.2rem;
+    }
+    
+    .situation-diagram {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .left-side, .center, .right-side {
+        width: 100%;
+    }
+    
+    .phone-line {
+        flex-direction: row;
+        margin: 5px 0;
+    }
+} 
