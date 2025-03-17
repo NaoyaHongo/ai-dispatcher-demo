@@ -5,53 +5,41 @@ const resultScreen = document.getElementById('result-screen');
 const startConversationBtn = document.getElementById('start-conversation');
 const endConversationBtn = document.getElementById('end-conversation');
 const restartDemoBtn = document.getElementById('restart-demo');
-const callDurationEl = document.getElementById('call-duration');
-
-// 通話時間用の変数
-let callInterval;
-let seconds = 0;
-let callActive = false;
 
 // ドキュメント読み込み完了後に実行
 document.addEventListener('DOMContentLoaded', function() {
-    // 初期化処理
-    resetDemo();
+    // イベントリスナーの設定
+    setupEventListeners();
     
-    // イベントリスナーの追加
+    // 初期画面を表示
+    showScreen(initialScreen);
+});
+
+// イベントリスナーの設定
+function setupEventListeners() {
+    // 「電話に出る」ボタン
     startConversationBtn.addEventListener('click', () => {
         showScreen(conversationScreen);
     });
 
+    // 「会話結果を見る」ボタン
     endConversationBtn.addEventListener('click', () => {
         showScreen(resultScreen);
     });
 
+    // 「デモをやり直す」ボタン
     restartDemoBtn.addEventListener('click', () => {
-        resetDemo();
+        showScreen(initialScreen);
     });
     
-    // UI操作用のボタン
-    setupActionButtons();
-});
-
-// 通話時間の更新関数
-function updateCallDuration() {
-    seconds++;
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    callDurationEl.textContent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-}
-
-// デモのリセット
-function resetDemo() {
-    // タイマーをリセット
-    if (callInterval) {
-        clearInterval(callInterval);
-        callActive = false;
-    }
-    
-    // 初期画面を表示
-    showScreen(initialScreen);
+    // 質問例のクリックイベント（クリックで次の画面へ）
+    const questionExamples = document.querySelectorAll('.example-scenario');
+    questionExamples.forEach(example => {
+        example.addEventListener('click', () => {
+            // 質問をクリックしても結果画面に進む
+            showScreen(resultScreen);
+        });
+    });
 }
 
 // 画面切り替え関数
@@ -66,22 +54,6 @@ function showScreen(screen) {
     
     // スクロールをトップに戻す
     window.scrollTo(0, 0);
-
-    // 通話画面の場合、タイマー開始
-    if (screen === conversationScreen) {
-        if (callActive) {
-            clearInterval(callInterval);
-        }
-        callActive = true;
-        seconds = 0;
-        callDurationEl.textContent = '00:00';
-        callInterval = setInterval(updateCallDuration, 1000);
-    } 
-    // それ以外の画面の場合、タイマー停止
-    else if (callActive) {
-        clearInterval(callInterval);
-        callActive = false;
-    }
 }
 
 // UI操作ボタンのセットアップ
