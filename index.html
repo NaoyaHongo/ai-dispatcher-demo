@@ -5,167 +5,243 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI配車マンとの会話デモ</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        #auth-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #F7F2FF 0%, #FFFFFF 100%);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .auth-content {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 32px rgba(136, 90, 248, 0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .auth-content img {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-content h2 {
+            color: #885AF8;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        
+        .auth-content .loading-dots {
+            color: #885AF8;
+            font-size: 2rem;
+            animation: loadingDots 1.4s infinite;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes loadingDots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        
+        #main-content {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <!-- 初期画面 -->
-    <section id="initial-screen" class="screen active">
-        <div class="container">
-            <h1>AI配車マンとの会話デモ</h1>
-            <div class="demo-description">
-                <p><strong>運送会社の配車担当者</strong>と<strong>AI配車マン</strong>の<br><span class="highlight">電話会話シミュレーション</span></p>
-                
-                <!-- 状況設定の図を追加 -->
-                <div class="situation-image">
-                    <div class="situation-diagram">
-                        <div class="left-side">
-                            <h3>あなた = 配車マン</h3>
-                            <div class="person-icon person-you"></div>
-                        </div>
-                        <div class="center">
-                            <div class="phone-line">
-                                <div class="arrow-left"></div>
-                                <div class="phone-icon-simple"></div>
-                                <div class="arrow-right"></div>
+    <!-- 認証画面 -->
+    <div id="auth-screen">
+        <div class="auth-content">
+            <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="55" stroke="#885AF8" stroke-width="10" stroke-dasharray="330" stroke-dashoffset="20">
+                    <animate attributeName="stroke-dashoffset" from="330" to="0" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <path d="M45 60L55 70L75 50" stroke="#885AF8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+                    <animate attributeName="stroke-dashoffset" values="100;0" dur="1s" fill="freeze"/>
+                </path>
+            </svg>
+            <h2>認証中</h2>
+            <div class="loading-dots" style="color: #885AF8; font-size: 24px;">...</div>
+        </div>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div id="main-content">
+        <!-- 初期画面 -->
+        <section id="initial-screen" class="screen active">
+            <div class="container">
+                <h1>AI配車マンとの会話デモ</h1>
+                <div class="demo-description">
+                    <p><strong>運送会社の配車担当者</strong>と<strong>AI配車マン</strong>の<br><span class="highlight">電話会話シミュレーション</span></p>
+                    
+                    <!-- 状況設定の図を追加 -->
+                    <div class="situation-image">
+                        <div class="situation-diagram">
+                            <div class="left-side">
+                                <h3>あなた = 配車マン</h3>
+                                <div class="person-icon person-you"></div>
+                            </div>
+                            <div class="center">
+                                <div class="phone-line">
+                                    <div class="arrow-left"></div>
+                                    <div class="phone-icon-simple"></div>
+                                    <div class="arrow-right"></div>
+                                </div>
+                            </div>
+                            <div class="right-side">
+                                <h3>AI配車マン</h3>
+                                <div class="person-icon person-ai"></div>
                             </div>
                         </div>
-                        <div class="right-side">
-                            <h3>AI配車マン</h3>
-                            <div class="person-icon person-ai"></div>
+                    </div>
+                    
+                    <div class="phone-animation">
+                        <div class="phone-icon">
+                            <div class="phone-ring"></div>
                         </div>
+                        <p>電話がかかってきています</p>
                     </div>
                 </div>
-                
-                <div class="phone-animation">
-                    <div class="phone-icon">
-                        <div class="phone-ring"></div>
-                    </div>
-                    <p>電話がかかってきています</p>
-                </div>
+                <button id="start-conversation" class="cta-button">電話に出る</button>
             </div>
-            <button id="start-conversation" class="cta-button">電話に出る</button>
-        </div>
-    </section>
+        </section>
 
-    <!-- 会話画面 -->
-    <section id="conversation-screen" class="screen">
-        <div class="container">
-            <h2>AI配車マンにこんな質問ができます</h2>
-            
-            <div class="question-examples">
-                <div class="example-scenario">
-                    <h3>配車スケジュール確認</h3>
-                    <p class="question-example">「今日の配車スケジュールを確認したい」</p>
+        <!-- 会話画面 -->
+        <section id="conversation-screen" class="screen">
+            <div class="container">
+                <h2>AI配車マンにこんな質問ができます</h2>
+                
+                <div class="question-examples">
+                    <div class="example-scenario">
+                        <h3>配車スケジュール確認</h3>
+                        <p class="question-example">「今日の配車スケジュールを確認したい」</p>
+                    </div>
+                    
+                    <div class="example-scenario">
+                        <h3>突発的な注文対応</h3>
+                        <p class="question-example">「急な注文が入ったけど、対応できる？」</p>
+                    </div>
+                    
+                    <div class="example-scenario">
+                        <h3>ドライバーの現在地確認</h3>
+                        <p class="question-example">「田中ドライバーの現在位置を教えて」</p>
+                    </div>
+                    
+                    <div class="example-scenario">
+                        <h3>最適ルートの提案</h3>
+                        <p class="question-example">「渋谷から横浜までの最適なルートは？」</p>
+                    </div>
+                    
+                    <div class="example-scenario">
+                        <h3>納品予定時刻の確認</h3>
+                        <p class="question-example">「大阪便の納品予定時刻に間に合う？」</p>
+                    </div>
+                    
+                    <div class="example-scenario">
+                        <h3>車両メンテナンス状況</h3>
+                        <p class="question-example">「4トン車の整備状況を教えて」</p>
+                    </div>
                 </div>
                 
-                <div class="example-scenario">
-                    <h3>突発的な注文対応</h3>
-                    <p class="question-example">「急な注文が入ったけど、対応できる？」</p>
-                </div>
-                
-                <div class="example-scenario">
-                    <h3>ドライバーの現在地確認</h3>
-                    <p class="question-example">「田中ドライバーの現在位置を教えて」</p>
-                </div>
-                
-                <div class="example-scenario">
-                    <h3>最適ルートの提案</h3>
-                    <p class="question-example">「渋谷から横浜までの最適なルートは？」</p>
-                </div>
-                
-                <div class="example-scenario">
-                    <h3>納品予定時刻の確認</h3>
-                    <p class="question-example">「大阪便の納品予定時刻に間に合う？」</p>
-                </div>
-                
-                <div class="example-scenario">
-                    <h3>車両メンテナンス状況</h3>
-                    <p class="question-example">「4トン車の整備状況を教えて」</p>
-                </div>
+                <button id="end-conversation" class="cta-button">会話結果を見る</button>
             </div>
-            
-            <button id="end-conversation" class="cta-button">会話結果を見る</button>
-        </div>
-    </section>
+        </section>
 
-    <!-- 結果画面 -->
-    <section id="result-screen" class="screen">
-        <div class="container">
-            <h2>電話での会話例</h2>
-            <div class="result-container">
-                <div class="conversation-history">
-                    <div class="chat-message ai">
-                        <div class="message-icon">🤖</div>
-                        <div class="message-content">
-                            <p class="speaker">AI配車マン</p>
-                            <p>こんにちは、AI配車マンです。どのようなご用件でしょうか？</p>
+        <!-- 結果画面 -->
+        <section id="result-screen" class="screen">
+            <div class="container">
+                <h2>電話での会話例</h2>
+                <div class="result-container">
+                    <div class="conversation-history">
+                        <div class="chat-message ai">
+                            <div class="message-icon">🤖</div>
+                            <div class="message-content">
+                                <p class="speaker">AI配車マン</p>
+                                <p>こんにちは、AI配車マンです。どのようなご用件でしょうか？</p>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-message you">
+                            <div class="message-icon">👤</div>
+                            <div class="message-content">
+                                <p class="speaker">配車担当</p>
+                                <p>今日の午後に急な配送依頼が入ったんだけど、対応できるドライバーはいる？</p>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-message ai">
+                            <div class="message-icon">🤖</div>
+                            <div class="message-content">
+                                <p class="speaker">AI配車マン</p>
+                                <p>確認します。午後の空き状況を調べています...</p>
+                                <p>山本ドライバーが14時以降空いています。また、佐藤ドライバーは15時30分に現在の配送が終わる予定です。配送先と荷物の大きさを教えていただけますか？</p>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-message you">
+                            <div class="message-icon">👤</div>
+                            <div class="message-content">
+                                <p class="speaker">配車担当</p>
+                                <p>新宿から横浜までの配送で、2トントラックで十分な量だよ。14時出発でも間に合うかな？</p>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-message ai">
+                            <div class="message-icon">🤖</div>
+                            <div class="message-content">
+                                <p class="speaker">AI配車マン</p>
+                                <p>現在の交通状況を確認しています...</p>
+                                <p>14時出発の場合、新宿から横浜までは現在の交通状況だと約50分かかる見込みです。山本ドライバーなら2トントラックでの対応が可能です。到着予定は14時50分頃となります。この予定でよろしいでしょうか？</p>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-message you">
+                            <div class="message-icon">👤</div>
+                            <div class="message-content">
+                                <p class="speaker">配車担当</p>
+                                <p>それで大丈夫。山本に手配してもらえる？</p>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-message ai">
+                            <div class="message-icon">🤖</div>
+                            <div class="message-content">
+                                <p class="speaker">AI配車マン</p>
+                                <p>承知しました。山本ドライバーに14時、新宿発横浜行きの配送依頼を手配します。詳細情報をドライバーのアプリに送信しました。他にご要件はありますか？</p>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="chat-message you">
-                        <div class="message-icon">👤</div>
-                        <div class="message-content">
-                            <p class="speaker">配車担当</p>
-                            <p>今日の午後に急な配送依頼が入ったんだけど、対応できるドライバーはいる？</p>
-                        </div>
-                    </div>
-                    
-                    <div class="chat-message ai">
-                        <div class="message-icon">🤖</div>
-                        <div class="message-content">
-                            <p class="speaker">AI配車マン</p>
-                            <p>確認します。午後の空き状況を調べています...</p>
-                            <p>山本ドライバーが14時以降空いています。また、佐藤ドライバーは15時30分に現在の配送が終わる予定です。配送先と荷物の大きさを教えていただけますか？</p>
-                        </div>
-                    </div>
-                    
-                    <div class="chat-message you">
-                        <div class="message-icon">👤</div>
-                        <div class="message-content">
-                            <p class="speaker">配車担当</p>
-                            <p>新宿から横浜までの配送で、2トントラックで十分な量だよ。14時出発でも間に合うかな？</p>
-                        </div>
-                    </div>
-                    
-                    <div class="chat-message ai">
-                        <div class="message-icon">🤖</div>
-                        <div class="message-content">
-                            <p class="speaker">AI配車マン</p>
-                            <p>現在の交通状況を確認しています...</p>
-                            <p>14時出発の場合、新宿から横浜までは現在の交通状況だと約50分かかる見込みです。山本ドライバーなら2トントラックでの対応が可能です。到着予定は14時50分頃となります。この予定でよろしいでしょうか？</p>
-                        </div>
-                    </div>
-                    
-                    <div class="chat-message you">
-                        <div class="message-icon">👤</div>
-                        <div class="message-content">
-                            <p class="speaker">配車担当</p>
-                            <p>それで大丈夫。山本に手配してもらえる？</p>
-                        </div>
-                    </div>
-                    
-                    <div class="chat-message ai">
-                        <div class="message-icon">🤖</div>
-                        <div class="message-content">
-                            <p class="speaker">AI配車マン</p>
-                            <p>承知しました。山本ドライバーに14時、新宿発横浜行きの配送依頼を手配します。詳細情報をドライバーのアプリに送信しました。他にご要件はありますか？</p>
-                        </div>
+                    <div class="result-summary">
+                        <h3>AI配車マンの効果</h3>
+                        <ul>
+                            <li>配車業務の効率化：電話一本で最新情報を確認</li>
+                            <li>人的ミスの削減：AIによる最適な提案</li>
+                            <li>コスト削減：24時間365日対応可能</li>
+                            <li>ドライバーの負担軽減：最適ルート提案</li>
+                            <li>顧客満足度向上：迅速・正確な情報提供</li>
+                        </ul>
                     </div>
                 </div>
-                
-                <div class="result-summary">
-                    <h3>AI配車マンの効果</h3>
-                    <ul>
-                        <li>配車業務の効率化：電話一本で最新情報を確認</li>
-                        <li>人的ミスの削減：AIによる最適な提案</li>
-                        <li>コスト削減：24時間365日対応可能</li>
-                        <li>ドライバーの負担軽減：最適ルート提案</li>
-                        <li>顧客満足度向上：迅速・正確な情報提供</li>
-                    </ul>
-                </div>
+                <button id="restart-demo" class="cta-button">デモをやり直す</button>
             </div>
-            <button id="restart-demo" class="cta-button">デモをやり直す</button>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <script src="script.js"></script>
 </body>

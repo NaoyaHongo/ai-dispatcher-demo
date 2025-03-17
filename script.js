@@ -5,15 +5,28 @@ const resultScreen = document.getElementById('result-screen');
 const startConversationBtn = document.getElementById('start-conversation');
 const endConversationBtn = document.getElementById('end-conversation');
 const restartDemoBtn = document.getElementById('restart-demo');
+const authScreen = document.getElementById('auth-screen');
+const mainContent = document.getElementById('main-content');
 
 // ドキュメント読み込み完了後に実行
 document.addEventListener('DOMContentLoaded', function() {
+    if (!checkAuth()) return;
+    
+    // 認証成功後にコンテンツを表示
+    showMainContent();
+
     // イベントリスナーの設定
     setupEventListeners();
     
     // 初期画面を表示
     showScreen(initialScreen);
 });
+
+// メインコンテンツを表示する関数
+function showMainContent() {
+    authScreen.style.display = 'none';
+    mainContent.style.display = 'block';
+}
 
 // イベントリスナーの設定
 function setupEventListeners() {
@@ -79,4 +92,26 @@ function setupActionButtons() {
             }, 300);
         });
     }
+}
+
+// 認証チェック
+function checkAuth() {
+    if (!sessionStorage.getItem('authenticated')) {
+        setTimeout(() => {
+            const password = prompt('このデモサイトはパスワードで保護されています。\nパスワードを入力してください:');
+            if (password === 'route-D') {
+                sessionStorage.setItem('authenticated', 'true');
+                showMainContent();
+                setupEventListeners();
+                showScreen(initialScreen);
+                return true;
+            } else {
+                alert('パスワードが正しくありません。');
+                window.location.href = 'about:blank';
+                return false;
+            }
+        }, 500); // 少し遅延を入れて、認証画面が確実に表示されるようにする
+        return false;
+    }
+    return true;
 } 
