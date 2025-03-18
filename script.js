@@ -3,10 +3,9 @@ const initialScreen = document.getElementById('initial-screen');
 const conversationScreen = document.getElementById('conversation-screen');
 const resultScreen = document.getElementById('result-screen');
 const startConversationBtn = document.getElementById('start-conversation');
+const navigationText = document.querySelector('.navigation-text');
 const endConversationBtn = document.querySelector('.end-call-btn');
 const mobileEndConversationBtn = document.getElementById('mobile-end-conversation');
-const restartDemoBtn = document.getElementById('restart-demo');
-const authScreen = document.getElementById('auth-screen');
 const mainContent = document.getElementById('main-content');
 const callDurationEl = document.querySelector('.call-duration');
 
@@ -18,11 +17,6 @@ const RESULT_SCREEN_TIMEOUT = 30000; // 30秒後にリセット
 
 // ドキュメント読み込み完了後に実行
 document.addEventListener('DOMContentLoaded', function() {
-    if (!checkAuth()) return;
-    
-    // 認証成功後にコンテンツを表示
-    showMainContent();
-
     // イベントリスナーの設定
     setupEventListeners();
     
@@ -30,45 +24,51 @@ document.addEventListener('DOMContentLoaded', function() {
     showScreen(initialScreen);
 });
 
-// メインコンテンツを表示する関数
-function showMainContent() {
-    authScreen.style.display = 'none';
-    mainContent.style.display = 'block';
-}
-
 // イベントリスナーの設定
 function setupEventListeners() {
-    // 「電話に出る」ボタン
-    startConversationBtn.addEventListener('click', () => {
-        showScreen(conversationScreen);
-        startCallTimer();
-    });
+    // ナビゲーションテキストはクリック不可に変更（テキスト表示のみ）
+    // if (navigationText) {
+    //     navigationText.addEventListener('click', () => {
+    //         showScreen(conversationScreen);
+    //         startCallTimer();
+    //     });
+    // }
 
-    // 「通話終了」ボタン（メイン）
-    endConversationBtn.addEventListener('click', () => {
-        stopCallTimer();
-        showScreen(resultScreen);
-        startResultScreenTimer(); // 結果画面タイマーを開始
-    });
-    
-    // 「通話終了」ボタン（モバイル用）
-    if (mobileEndConversationBtn) {
-        mobileEndConversationBtn.addEventListener('click', () => {
-            stopCallTimer();
-            showScreen(resultScreen);
-            startResultScreenTimer(); // 結果画面タイマーを開始
-        });
-    }
+    // 「通話終了」ボタンはテキストに変更したためクリックイベントは不要
+    // 画面遷移はキーボードの「e」キーのみで行う
 
-    // 「デモをやり直す」ボタン
-    restartDemoBtn.addEventListener('click', () => {
-        clearResultScreenTimer(); // タイマーをクリア
-        resetCallTimer();
-        showScreen(initialScreen);
-    });
+    // 「デモをやり直す」ボタンの処理を削除
+    // restartDemoBtn.addEventListener('click', () => {
+    //     clearResultScreenTimer(); // タイマーをクリア
+    //     resetCallTimer();
+    //     showScreen(initialScreen);
+    // });
     
     // 質問例のクリックイベントは削除
     // 質問例は参考表示のみとする
+    
+    // キーボードイベントの追加 - 「e」キーで画面を進める
+    document.addEventListener('keydown', (event) => {
+        // eキーが押された場合（小文字・大文字両方対応）
+        if (event.key === 'e' || event.key === 'E') {
+            // 現在アクティブな画面に応じて次の画面に進む
+            if (initialScreen.classList.contains('active')) {
+                // 初期画面から会話画面へ
+                showScreen(conversationScreen);
+                startCallTimer();
+            } else if (conversationScreen.classList.contains('active')) {
+                // 会話画面から結果画面へ
+                stopCallTimer();
+                showScreen(resultScreen);
+                startResultScreenTimer();
+            } else if (resultScreen.classList.contains('active')) {
+                // 結果画面から初期画面へ
+                clearResultScreenTimer();
+                resetCallTimer();
+                showScreen(initialScreen);
+            }
+        }
+    });
 }
 
 // 画面切り替え関数
@@ -171,26 +171,4 @@ function resetCallTimer() {
     if (callDurationEl) {
         callDurationEl.textContent = '00:00';
     }
-}
-
-// 認証チェック
-function checkAuth() {
-    if (!sessionStorage.getItem('authenticated')) {
-        setTimeout(() => {
-            const password = prompt('このデモサイトはパスワードで保護されています。\nパスワードを入力してください:');
-            if (password === 'route-D') {
-                sessionStorage.setItem('authenticated', 'true');
-                showMainContent();
-                setupEventListeners();
-                showScreen(initialScreen);
-                return true;
-            } else {
-                alert('パスワードが正しくありません。');
-                window.location.href = 'about:blank';
-                return false;
-            }
-        }, 500); // 少し遅延を入れて、認証画面が確実に表示されるようにする
-        return false;
-    }
-    return true;
 } 
