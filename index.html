@@ -61,6 +61,70 @@
         #main-content {
             display: none;
         }
+        
+        /* 会話画面の電話インターフェース */
+        .phone-interface {
+            background-color: var(--secondary);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .phone-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: var(--primary);
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .phone-status-icon {
+            margin-right: 10px;
+            font-size: 24px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .phone-status-text {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .question-examples {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        /* 結果画面の2カラムレイアウト */
+        .result-container {
+            display: grid;
+            grid-template-columns: 60% 40%;
+            gap: 20px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .result-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-examples {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -124,41 +188,83 @@
         <!-- 会話画面 -->
         <section id="conversation-screen" class="screen">
             <div class="container">
-                <h2>AI配車マンにこんな質問ができます</h2>
-                
-                <div class="question-examples">
-                    <div class="example-scenario">
-                        <h3>配車スケジュール確認</h3>
-                        <p class="question-example">「今日の配車スケジュールを確認したい」</p>
-                    </div>
-                    
-                    <div class="example-scenario">
-                        <h3>突発的な注文対応</h3>
-                        <p class="question-example">「急な注文が入ったけど、対応できる？」</p>
-                    </div>
-                    
-                    <div class="example-scenario">
-                        <h3>ドライバーの現在地確認</h3>
-                        <p class="question-example">「田中ドライバーの現在位置を教えて」</p>
-                    </div>
-                    
-                    <div class="example-scenario">
-                        <h3>最適ルートの提案</h3>
-                        <p class="question-example">「渋谷から横浜までの最適なルートは？」</p>
-                    </div>
-                    
-                    <div class="example-scenario">
-                        <h3>納品予定時刻の確認</h3>
-                        <p class="question-example">「大阪便の納品予定時刻に間に合う？」</p>
-                    </div>
-                    
-                    <div class="example-scenario">
-                        <h3>車両メンテナンス状況</h3>
-                        <p class="question-example">「4トン車の整備状況を教えて」</p>
+                <!-- 状況設定を上部に配置 -->
+                <div class="situation-header">
+                    <h2 class="situation-title">状況設定</h2>
+                    <div class="situation-explanation">
+                        <div class="situation-icon">📋</div>
+                        <p>あなたは運送会社の配車マンです。お世話になっている荷主のAI配車マンが車両を探していて、荷物を運べそうかの電話がかかってきています</p>
                     </div>
                 </div>
                 
-                <button id="end-conversation" class="cta-button">会話結果を見る</button>
+                <!-- 2カラムレイアウト -->
+                <div class="conversation-layout">
+                    <!-- 左カラム：電話UI -->
+                    <div class="conversation-left-column">
+                        <div class="phone-call-interface">
+                            <!-- 通話UI上部 -->
+                            <div class="call-header">
+                                <div class="caller-info">
+                                    <div class="caller-name">AI配車マン</div>
+                                    <div class="call-duration">00:08</div>
+                                </div>
+                            </div>
+
+                            <!-- 通話中央部分 -->
+                            <div class="call-avatar-container">
+                                <div class="call-avatar">
+                                    <div class="avatar-inner">🤖</div>
+                                </div>
+                                <div class="call-status">通話中</div>
+                            </div>
+
+                            <!-- 通話操作ボタン -->
+                            <div class="call-actions">
+                                <button class="call-btn end-call-btn" id="end-conversation">
+                                    <span class="btn-icon">📵</span>
+                                    <span class="btn-text">通話終了</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右カラム：質問例 -->
+                    <div class="conversation-right-column">
+                        <h3 class="column-title">質問例</h3>
+                        
+                        <div class="question-examples">
+                            <div class="example-scenario">
+                                <h3>配車スケジュール確認</h3>
+                                <p class="question-example">「今日の配車スケジュールを確認したい」</p>
+                            </div>
+                            
+                            <div class="example-scenario">
+                                <h3>突発的な注文対応</h3>
+                                <p class="question-example">「急な注文が入ったけど、対応できる？」</p>
+                            </div>
+                            
+                            <div class="example-scenario">
+                                <h3>ドライバーの現在地確認</h3>
+                                <p class="question-example">「田中ドライバーの現在位置を教えて」</p>
+                            </div>
+                            
+                            <div class="example-scenario">
+                                <h3>最適ルートの提案</h3>
+                                <p class="question-example">「渋谷から横浜までの最適なルートは？」</p>
+                            </div>
+                            
+                            <div class="example-scenario">
+                                <h3>納品予定時刻の確認</h3>
+                                <p class="question-example">「大阪便の納品予定時刻に間に合う？」</p>
+                            </div>
+                            
+                            <div class="example-scenario">
+                                <h3>車両メンテナンス状況</h3>
+                                <p class="question-example">「4トン車の整備状況を教えて」</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -236,9 +342,33 @@
                             <li>ドライバーの負担軽減：最適ルート提案</li>
                             <li>顧客満足度向上：迅速・正確な情報提供</li>
                         </ul>
+                        
+                        <div class="benefit-highlight">
+                            <h4>導入効果</h4>
+                            <div class="benefit-stats">
+                                <div class="stat">
+                                    <span class="stat-value">30%</span>
+                                    <span class="stat-label">業務効率の向上</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">24時間</span>
+                                    <span class="stat-label">対応可能</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">15%</span>
+                                    <span class="stat-label">コスト削減</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <button id="restart-demo" class="cta-button">デモをやり直す</button>
+                <div class="result-actions">
+                    <button id="restart-demo" class="cta-button">デモをやり直す</button>
+                    <!-- カウントダウン表示 -->
+                    <div class="auto-reset-notice">
+                        <span><span id="result-countdown">30</span>秒後に自動的に初期画面に戻ります</span>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
